@@ -1,6 +1,75 @@
 const express = require('express');
 const router = express.Router();
 
+// Make-specific image map — each brand gets a curated Unsplash photo
+const makeImageMap = {
+  'Lamborghini':    'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800',
+  'Ferrari':        'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800',
+  'Porsche':        'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=800',
+  'BMW':            'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800',
+  'Audi':           'https://images.unsplash.com/photo-1571987502227-9b8db85f8b22?w=800',
+  'Mercedes-Benz':  'https://images.unsplash.com/photo-1485291571150-772efc42c2d4?w=800',
+  'Volkswagen':     'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800',
+  'MINI':           'https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?w=800',
+  'Ford':           'https://images.unsplash.com/photo-1551830820-c4b29e9bffc0?w=800',
+  'Chevrolet':      'https://images.unsplash.com/photo-1580274455191-1c62238fa333?w=800',
+  'Dodge':          'https://images.unsplash.com/photo-1517994112540-009c47ea476b?w=800',
+  'Jeep':           'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800',
+  'Ram':            'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800',
+  'GMC':            'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800',
+  'Cadillac':       'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800',
+  'Buick':          'https://images.unsplash.com/photo-1619362280286-f1f8fd5032ed?w=800',
+  'Lincoln':        'https://images.unsplash.com/photo-1580273916550-63da42e79fdc?w=800',
+  'Chrysler':       'https://images.unsplash.com/photo-1502877338535-766e1452684a?w=800',
+  'Tesla':          'https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=800',
+  'Rivian':         'https://images.unsplash.com/photo-1554743073-8873b7e4f9f3?w=800',
+  'Lucid':          'https://images.unsplash.com/photo-1601816461-bcd2f85f58bd?w=800',
+  'Toyota':         'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800',
+  'Honda':          'https://images.unsplash.com/photo-1547744152-14d985cb937f?w=800',
+  'Nissan':         'https://images.unsplash.com/photo-1547744173-b6c77cff3213?w=800',
+  'Mazda':          'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800',
+  'Subaru':         'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800',
+  'Mitsubishi':     'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=800',
+  'Acura':          'https://images.unsplash.com/photo-1616455579100-2ceaa4088152?w=800',
+  'Infiniti':       'https://images.unsplash.com/photo-1619362280286-f1f8fd5032ed?w=800',
+  'Lexus':          'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800',
+  'Hyundai':        'https://images.unsplash.com/photo-1605816988069-b11383b50717?w=800',
+  'Kia':            'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=800',
+  'Genesis':        'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=800',
+  'BYD':            'https://images.unsplash.com/photo-1554743073-8873b7e4f9f3?w=800',
+  'NIO':            'https://images.unsplash.com/photo-1601816461-bcd2f85f58bd?w=800',
+  'Xpeng':          'https://images.unsplash.com/photo-1554743073-8873b7e4f9f3?w=800',
+  'Li Auto':        'https://images.unsplash.com/photo-1519245659620-e859806a8d3b?w=800',
+  'Rolls-Royce':    'https://images.unsplash.com/photo-1563137784565-7ad3c9b55aac?w=800',
+  'Bentley':        'https://images.unsplash.com/photo-1588493271312-b1d84c0bfcf9?w=800',
+  'Bugatti':        'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800',
+  'Aston Martin':   'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800',
+  'McLaren':        'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800',
+  'Range Rover':    'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800',
+  'Karma':          'https://images.unsplash.com/photo-1601816461-bcd2f85f58bd?w=800',
+  'Shelby':         'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800',
+  'AMC':            'https://images.unsplash.com/photo-1517994112540-009c47ea476b?w=800',
+  'Mercury':        'https://images.unsplash.com/photo-1517994112540-009c47ea476b?w=800',
+  'Plymouth':       'https://images.unsplash.com/photo-1517994112540-009c47ea476b?w=800',
+  'Pontiac':        'https://images.unsplash.com/photo-1517994112540-009c47ea476b?w=800',
+  'Oldsmobile':     'https://images.unsplash.com/photo-1517994112540-009c47ea476b?w=800',
+};
+
+// Category fallback images
+const categoryImageMap = {
+  'Sports':   'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800',
+  'SUV':      'https://images.unsplash.com/photo-1519245659620-e859806a8d3b?w=800',
+  'Sedan':    'https://images.unsplash.com/photo-1502877338535-766e1452684a?w=800',
+  'Truck':    'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800',
+  'Van':      'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800',
+  'Classic':  'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800',
+};
+
+function resolveCarImage(car) {
+  // Use make-specific image if available, else category fallback
+  return makeImageMap[car.make] || categoryImageMap[car.category] || car.image;
+}
+
 const cars = [
   // ─── LAMBORGHINI ───────────────────────────────────────────────
   {
@@ -4739,14 +4808,15 @@ router.get('/', (req, res) => {
   if (sort === 'rating') results.sort((a, b) => b.rating - a.rating);
   if (sort === 'name') results.sort((a, b) => `${a.make} ${a.model}`.localeCompare(`${b.make} ${b.model}`));
 
-  res.json({ results, total: results.length });
+  const resolved = results.map((c) => ({ ...c, image: resolveCarImage(c) }));
+  res.json({ results: resolved, total: resolved.length });
 });
 
 // GET /api/cars/:id
 router.get('/:id', (req, res) => {
   const car = cars.find((c) => c.id === parseInt(req.params.id));
   if (!car) return res.status(404).json({ error: 'Car not found' });
-  res.json(car);
+  res.json({ ...car, image: resolveCarImage(car) });
 });
 
 // GET /api/cars/:id/similar
@@ -4756,7 +4826,8 @@ router.get('/:id/similar', (req, res) => {
 
   const similar = cars
     .filter((c) => c.id !== car.id && (c.category === car.category || c.make === car.make))
-    .slice(0, 4);
+    .slice(0, 4)
+    .map((c) => ({ ...c, image: resolveCarImage(c) }));
 
   res.json(similar);
 });

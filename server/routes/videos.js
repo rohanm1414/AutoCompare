@@ -8,34 +8,29 @@ router.get('/', async (req, res) => {
   const apiKey = process.env.YOUTUBE_API_KEY;
 
   if (!apiKey || apiKey === 'your_youtube_api_key_here') {
-    // Return mock videos if no API key
+    // Return mock videos — use YouTube's actual thumbnail URL format for realism
+    // Real videos about popular car reviews
+    const mockVideos = [
+      { videoId: 'ZFNKiCe91To', title: `${q} - Full Review`, channel: 'Edmunds' },
+      { videoId: 'pqHUqQ4iyJo', title: `${q} - Test Drive & Walk Around`, channel: 'MotorTrend' },
+      { videoId: 'f4P-IhF6dh4', title: `${q} - First Drive Impressions`, channel: 'Car and Driver' },
+      { videoId: 'Z7HNp2KKBR4', title: `${q} - Should You Buy One?`, channel: 'Doug DeMuro' },
+      { videoId: 'gVri0nq0pIU', title: `${q} - In-Depth Walk Around`, channel: 'TFLcar' },
+      { videoId: 'sYRiIL2OBHQ', title: `${q} - Ownership Review`, channel: 'AutoCompare Reviews' },
+    ];
     return res.json({
-      items: [
-        {
-          id: { videoId: 'dQw4w9WgXcQ' },
-          snippet: {
-            title: `${q} - Review`,
-            description: 'Car review video',
-            channelTitle: 'AutoCompare Reviews',
-            publishedAt: new Date().toISOString(),
-            thumbnails: {
-              medium: { url: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=320&h=180&fit=crop' },
-            },
+      items: mockVideos.map(({ videoId, title, channel }) => ({
+        id: { videoId },
+        snippet: {
+          title,
+          description: `Watch our comprehensive review of the ${q}`,
+          channelTitle: channel,
+          publishedAt: new Date().toISOString(),
+          thumbnails: {
+            medium: { url: `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg` },
           },
         },
-        {
-          id: { videoId: 'dQw4w9WgXcQ' },
-          snippet: {
-            title: `${q} - Test Drive`,
-            description: 'Test drive video',
-            channelTitle: 'Car Reviews Channel',
-            publishedAt: new Date().toISOString(),
-            thumbnails: {
-              medium: { url: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=320&h=180&fit=crop' },
-            },
-          },
-        },
-      ],
+      })),
     });
   }
 
