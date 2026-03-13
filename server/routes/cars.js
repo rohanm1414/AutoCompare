@@ -66,8 +66,10 @@ const categoryImageMap = {
 };
 
 function resolveCarImage(car) {
-  // Use make-specific image if available, else category fallback
-  return makeImageMap[car.make] || categoryImageMap[car.category] || car.image;
+  // Generate a stable, keyword-relevant image per car using Unsplash source API.
+  // The `sig` param (car id) ensures the same car always returns the same image.
+  const keyword = encodeURIComponent(`${car.make} ${car.model} car`);
+  return `https://source.unsplash.com/800x600/?${keyword}&sig=${car.id}`;
 }
 
 const cars = [
@@ -4780,33 +4782,83 @@ const cars = [
 
 // GET /api/cars - list all or search
 router.get('/', (req, res) => {
-  const { q, category, make, sort } = req.query;
+  const { q, category, make, year, minYear, maxYear, fuelType, sort } = req.query;
   let results = [...cars];
 
+  // ── Full-text tokenized search ─────────────────────────────────────────
+  // Splits multi-word queries ("cadillac ct4", "toyota 2024") into tokens and
+  // requires ALL tokens to match somewhere in the car's searchable fields.
   if (q) {
-    const query = q.toLowerCase();
-    results = results.filter(
-      (c) =>
-        c.make.toLowerCase().includes(query) ||
-        c.model.toLowerCase().includes(query) ||
-        c.year.toString().includes(query) ||
-        c.category.toLowerCase().includes(query) ||
-        c.tags.some((t) => t.includes(query))
-    );
+    const tokens = q.toLowerCase().trim().split(/\s+/).filter(Boolean);
+    results = results.filter((c) => {
+      const haystack = [
+        c.make,
+        c.model,
+        `${c.make} ${c.model}`,
+        `${c.make} ${c.model} ${c.year}`,
+        c.year.toString(),
+        c.category,
+        c.specs && c.specs.fuelType ? c.specs.fuelType : '',
+        ...c.tags,
+      ]
+        .join(' ')
+        .toLowerCase();
+      return tokens.every((token) => haystack.includes(token));
+    });
   }
 
+  // ── Category filter (with special handling) ────────────────────────────
   if (category) {
-    results = results.filter((c) => c.category.toLowerCase() === category.toLowerCase());
+    const cat = category.toLowerCase();
+    if (cat === 'electric') {
+      // 'Electric' browse button → filter by fuelType, not category field
+      results = results.filter((c) => {
+        const ft = (c.specs && c.specs.fuelType ? c.specs.fuelType : '').toLowerCase();
+        return ft.includes('electric') || ft.includes('ev') || ft === 'bev';
+      });
+    } else if (cat === 'luxury sedan') {
+      // Luxury Sedan = sedan category + luxury tag OR base price > $50k
+      results = results.filter(
+        (c) =>
+          c.category.toLowerCase() === 'sedan' &&
+          (c.tags.includes('luxury') || c.price.base > 50000)
+      );
+    } else {
+      results = results.filter((c) => c.category.toLowerCase() === cat);
+    }
   }
 
+  // ── Make filter ────────────────────────────────────────────────────────
   if (make) {
     results = results.filter((c) => c.make.toLowerCase() === make.toLowerCase());
   }
 
-  if (sort === 'price-asc') results.sort((a, b) => a.price.base - b.price.base);
+  // ── Year filters ───────────────────────────────────────────────────────
+  if (year) {
+    results = results.filter((c) => c.year === parseInt(year, 10));
+  }
+  if (minYear) {
+    results = results.filter((c) => c.year >= parseInt(minYear, 10));
+  }
+  if (maxYear) {
+    results = results.filter((c) => c.year <= parseInt(maxYear, 10));
+  }
+
+  // ── Fuel type filter ───────────────────────────────────────────────────
+  if (fuelType) {
+    const ft = fuelType.toLowerCase();
+    results = results.filter((c) =>
+      (c.specs && c.specs.fuelType ? c.specs.fuelType : '').toLowerCase().includes(ft)
+    );
+  }
+
+  // ── Sorting ────────────────────────────────────────────────────────────
+  if (sort === 'price-asc')  results.sort((a, b) => a.price.base - b.price.base);
   if (sort === 'price-desc') results.sort((a, b) => b.price.base - a.price.base);
-  if (sort === 'rating') results.sort((a, b) => b.rating - a.rating);
-  if (sort === 'name') results.sort((a, b) => `${a.make} ${a.model}`.localeCompare(`${b.make} ${b.model}`));
+  if (sort === 'rating')     results.sort((a, b) => b.rating - a.rating);
+  if (sort === 'name')       results.sort((a, b) => `${a.make} ${a.model}`.localeCompare(`${b.make} ${b.model}`));
+  if (sort === 'year-desc')  results.sort((a, b) => b.year - a.year);
+  if (sort === 'year-asc')   results.sort((a, b) => a.year - b.year);
 
   const resolved = results.map((c) => ({ ...c, image: resolveCarImage(c) }));
   res.json({ results: resolved, total: resolved.length });
