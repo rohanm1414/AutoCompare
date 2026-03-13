@@ -28,17 +28,22 @@ const currentYear = new Date().getFullYear();
 const yearOptions = Array.from({ length: currentYear - 1999 }, (_, i) => currentYear - i);
 
 export default function SearchResultsPage() {
-  const [params, setParams] = useSearchParams();
+  const [params] = useSearchParams();
 
-  const q        = params.get('q')        || '';
-  const category = params.get('category') || '';
+  // Read every possible filter from the URL so deep-links / home-page buttons work
+  const q           = params.get('q')        || '';
+  const category    = params.get('category') || '';
+  const urlFuelType = params.get('fuelType') || '';
+  const urlMinYear  = params.get('minYear')  || '';
+  const urlMaxYear  = params.get('maxYear')  || '';
 
+  // Local state — initialised from URL params
   const [sort,     setSort]     = useState('');
-  const [minYear,  setMinYear]  = useState('');
-  const [maxYear,  setMaxYear]  = useState('');
+  const [minYear,  setMinYear]  = useState(urlMinYear);
+  const [maxYear,  setMaxYear]  = useState(urlMaxYear);
+  // 'Electric' category button now routes to ?fuelType=Electric, so pick that up
   const [fuelType, setFuelType] = useState(
-    // If user clicked "Electric" category button, pre-set the fuel type filter
-    category.toLowerCase() === 'electric' ? 'Electric' : ''
+    urlFuelType || (category.toLowerCase() === 'electric' ? 'Electric' : '')
   );
   const [showFilters, setShowFilters] = useState(false);
 
@@ -46,19 +51,29 @@ export default function SearchResultsPage() {
   const [total,   setTotal]   = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // Determine active filter count for badge
+  // Re-sync state when URL params change (e.g. user clicks another category btn)
+  useEffect(() => {
+    setFuelType(urlFuelType || (category.toLowerCase() === 'electric' ? 'Electric' : ''));
+    setMinYear(urlMinYear);
+    setMaxYear(urlMaxYear);
+  }, [urlFuelType, urlMinYear, urlMaxYear, category]);
+
+  // Active filter count badge
   const activeFilterCount = [minYear, maxYear, fuelType].filter(Boolean).length;
 
+  // ── Fetch results ─────────────────────────────────────────────────────────
   useEffect(() => {
     setLoading(true);
 
-    // Build params — only send non-empty values
     const apiParams = { q, sort };
-    // Don't send category=Electric — it's handled via fuelType on backend
-    if (category && category.toLowerCase() !== 'electric') apiParams.category = category;
+
+    // Don't pass category=Electric — it's handled via fuelType on the backend
+    if (category && category.toLowerCase() !== 'electric') {
+      apiParams.category = category;
+    }
+    if (fuelType) apiParams.fuelType = fuelType;
     if (minYear)  apiParams.minYear  = minYear;
     if (maxYear)  apiParams.maxYear  = maxYear;
-    if (fuelType) apiParams.fuelType = fuelType;
 
     searchCars(apiParams)
       .then(({ results, total }) => {
@@ -67,7 +82,7 @@ export default function SearchResultsPage() {
       })
       .catch(console.error)
       .finally(() => setLoading(false));
-  }, [q, category, sort, minYear, maxYear, fuelType]);
+  }, [q, category, sort, fuelType, minYear, maxYear]);
 
   const clearFilters = () => {
     setMinYear('');
@@ -76,8 +91,11 @@ export default function SearchResultsPage() {
     setSort('');
   };
 
+  // Smart page title
   const title = q
     ? `Results for "${q}"`
+    : fuelType && !category
+    ? `${fuelType} Cars`
     : category
     ? `${category} Cars`
     : 'All Cars';
@@ -184,7 +202,7 @@ export default function SearchResultsPage() {
         </div>
       )}
 
-      {/* ── Active filter chips ──────────────────────────────────────── */}
+      {/* ── Active filter chips (collapsed state) ───────────────────── */}
       {activeFilterCount > 0 && !showFilters && (
         <div className="flex flex-wrap gap-2 mb-4">
           {minYear && (
@@ -216,7 +234,17 @@ export default function SearchResultsPage() {
       ) : cars.length === 0 ? (
         <div className="text-center py-20 text-gray-500">
           <p className="text-lg font-medium">No cars found.</p>
-          <p className="text-sm mt-1">Try a different search term, adjust the year range, or change the fuel type filter.</p>
+          <p className="text-sm mt-2">
+            Try a different search term, adjust the year range, or change the fuel type filter.
+          </p>
+          {(minYear || maxYear || fuelType) && (
+            <button
+              onClick={clearFilters}
+              className="mt-4 text-blue-600 hover:underline text-sm"
+            >
+              Clear all filters
+            </button>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
