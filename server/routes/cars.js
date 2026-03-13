@@ -13,64 +13,64 @@ const makeImageMap = {
   // ── Exotic / Supercar ──────────────────────────────────────────────────────
   'Lamborghini': 'photo-1544636331-e26879cd4d9b',  // Yellow Lamborghini
   'Ferrari':     'photo-1592198084033-aade902d1aae',// Red Ferrari
-  'Bugatti':     'photo-1544636331-e26879cd4d9b',  // Exotic sports car
-  'McLaren':     'photo-1503376780353-7e6692767b70',// Sports car
-  'Pagani':      'photo-1503376780353-7e6692767b70',
-  'Koenigsegg':  'photo-1503376780353-7e6692767b70',
-  'Rimac':       'photo-1560958089-b8a1929cea89',  // EV hypercar
+  'Bugatti':     'photo-1617814076367-b759c7d7e738',// Bugatti Chiron (unique)
+  'McLaren':     'photo-1492144534655-ae79c964c9d7',// McLaren exotic (unique)
+  'Pagani':      'photo-1592198084033-aade902d1aae',// Exotic supercar
+  'Koenigsegg':  'photo-1544636331-e26879cd4d9b',  // Hypercar
+  'Rimac':       'photo-1617814076367-b759c7d7e738',// EV hypercar
   // ── Luxury European ───────────────────────────────────────────────────────
-  'Porsche':       'photo-1503376780353-7e6692767b70',// Porsche 911 orange
-  'BMW':           'photo-1555215695-3004980ad54e',  // BMW blue
-  'Mercedes-Benz': 'photo-1618843479313-40f8afb4b4d8',// White Mercedes
-  'Audi':          'photo-1549317661-cf369843f58b',  // Silver Audi sedan
-  'Volkswagen':    'photo-1541899481282-d53bffe3c35d',// VW sedan
-  'Aston Martin':  'photo-1553440569-bcc63803b83d',  // Aston Martin
-  'Bentley':       'photo-1563720223185-11003d516935',// White luxury
-  'Rolls-Royce':   'photo-1563720223185-11003d516935',// White luxury
-  'Maserati':      'photo-1519641471654-ac18d401b58e',// Italian sports sedan
-  'Alfa Romeo':    'photo-1533473359331-0135ef1b58bf',// Italian sports car
-  'Lotus':         'photo-1542362567-b07e54358753',  // Sports car
-  'MINI':          'photo-1525609004556-c46c7d6cf023',// MINI Cooper
+  'Porsche':       'photo-1503376780353-7e6692767b70',// Porsche 911 orange (unique)
+  'BMW':           'photo-1555215695-3004980ad54e',  // BMW blue (unique)
+  'Mercedes-Benz': 'photo-1618843479313-40f8afb4b4d8',// Mercedes AMG GT (unique)
+  'Audi':          'photo-1549317661-cf369843f58b',  // Silver Audi sedan (unique)
+  'Volkswagen':    'photo-1541899481282-d53bffe3c35d',// VW sedan (unique)
+  'Aston Martin':  'photo-1553440569-bcc63803b83d',  // Aston Martin (unique)
+  'Bentley':       'photo-1563720223185-11003d516935',// White Bentley (unique)
+  'Rolls-Royce':   'photo-1563720223185-11003d516935',// White Rolls-Royce
+  'Maserati':      'photo-1519641471654-ac18d401b58e',// Maserati sedan (unique)
+  'Alfa Romeo':    'photo-1533473359331-0135ef1b58bf',// Alfa Romeo (unique now)
+  'Lotus':         'photo-1542362567-b07e54358753',  // Lotus sports car (unique)
+  'MINI':          'photo-1525609004556-c46c7d6cf023',// MINI Cooper (unique)
   // ── American ──────────────────────────────────────────────────────────────
-  'Ford':       'photo-1551830820-c4b29e9bffc0',  // Ford truck/Mustang
-  'Chevrolet':  'photo-1552519507-da3b142c4714',  // Chevy Camaro blue
-  'Dodge':      'photo-1533473359331-0135ef1b58bf',// Dodge muscle car
-  'Jeep':       'photo-1609521263047-f8f205293f24',// Jeep off-road
-  'Ram':        'photo-1558618666-fcd25c85cd64',  // Ram truck
-  'GMC':        'photo-1590362891991-d5b7b6a78b01',// GMC truck
-  'Cadillac':   'photo-1580274455152-f90ac6b10d36',// Dark luxury sedan
-  'Buick':      'photo-1494976388531-d1058494cdd8',// Buick/luxury sedan
-  'Lincoln':    'photo-1580274455152-f90ac6b10d36',// Luxury sedan
-  'Chrysler':   'photo-1547038577-da80abbc4f19',  // Chrysler sedan
-  'Tesla':      'photo-1560958089-b8a1929cea89',  // Tesla EV
-  'Rivian':     'photo-1554743073-8873b7e4f9f3',  // EV truck
-  'Lucid':      'photo-1601816461-bcd2f85f58bd',  // Luxury EV sedan
-  'Karma':      'photo-1601816461-bcd2f85f58bd',  // Luxury EV
-  'Shelby':     'photo-1533473359331-0135ef1b58bf',// American muscle
-  'AMC':        'photo-1533473359331-0135ef1b58bf',
-  'Mercury':    'photo-1547038577-da80abbc4f19',
-  'Plymouth':   'photo-1533473359331-0135ef1b58bf',
-  'Pontiac':    'photo-1552519507-da3b142c4714',
-  'Oldsmobile': 'photo-1547038577-da80abbc4f19',
+  'Ford':       'photo-1551830820-c4b29e9bffc0',  // Ford Mustang/truck (unique)
+  'Chevrolet':  'photo-1552519507-da3b142c4714',  // Chevy Camaro blue (unique)
+  'Dodge':      'photo-1517994112540-009c47ea476b',// Dodge muscle car (unique)
+  'Jeep':       'photo-1609521263047-f8f205293f24',// Jeep off-road (unique now)
+  'Ram':        'photo-1558618666-fcd25c85cd64',  // Ram truck (unique)
+  'GMC':        'photo-1590362891991-d5b7b6a78b01',// GMC truck (unique)
+  'Cadillac':   'photo-1580274455152-f90ac6b10d36',// Cadillac dark luxury (unique)
+  'Buick':      'photo-1494976388531-d1058494cdd8',// Buick luxury sedan (unique now)
+  'Lincoln':    'photo-1519641471654-ac18d401b58e',// Lincoln luxury sedan
+  'Chrysler':   'photo-1547038577-da80abbc4f19',  // Chrysler sedan (unique)
+  'Tesla':      'photo-1560958089-b8a1929cea89',  // Tesla EV (unique)
+  'Rivian':     'photo-1554743073-8873b7e4f9f3',  // Rivian EV truck (unique)
+  'Lucid':      'photo-1601816461-bcd2f85f58bd',  // Lucid luxury EV (unique)
+  'Karma':      'photo-1601816461-bcd2f85f58bd',  // Karma luxury EV
+  'Shelby':     'photo-1551830820-c4b29e9bffc0',  // Shelby (Ford-based muscle)
+  'AMC':        'photo-1492144534655-ae79c964c9d7',// AMC classic
+  'Mercury':    'photo-1547038577-da80abbc4f19',  // Mercury sedan
+  'Plymouth':   'photo-1552519507-da3b142c4714',  // Plymouth muscle
+  'Pontiac':    'photo-1552519507-da3b142c4714',  // Pontiac muscle (GM)
+  'Oldsmobile': 'photo-1547038577-da80abbc4f19',  // Oldsmobile sedan
   // ── Japanese ──────────────────────────────────────────────────────────────
-  'Toyota':    'photo-1618843479313-40f8afb4b4d8',// Toyota sedan
-  'Honda':     'photo-1619767886558-efdc7b9af0cd',// Honda Civic/Accord
-  'Nissan':    'photo-1494976388531-d1058494cdd8',// Nissan GT-R / sedan
-  'Mazda':     'photo-1583121274602-3e2820c69888',// Mazda sports
-  'Subaru':    'photo-1609521263047-f8f205293f24',// Subaru SUV/Outback
+  'Toyota':    'photo-1549317661-bd32c8ce0db2',   // Toyota sedan (unique — was showing Mercedes!)
+  'Honda':     'photo-1619767886558-efdc7b9af0cd',// Honda Civic/Accord (unique)
+  'Nissan':    'photo-1547744173-b6c77cff3213',   // Nissan GT-R (unique)
+  'Mazda':     'photo-1583121274602-3e2820c69888',// Mazda sports (unique)
+  'Subaru':    'photo-1621007947382-bb3c3994e3fb',// Subaru SUV/Outback (unique)
   'Mitsubishi':'photo-1547038577-da80abbc4f19',   // Mitsubishi sedan
-  'Acura':     'photo-1616455579100-2ceaa4088152',// Acura luxury
-  'Infiniti':  'photo-1578662996442-48f60103fc96',// Infiniti luxury
-  'Lexus':     'photo-1549399909-c0b3c00c9b5f',   // Lexus luxury sedan
+  'Acura':     'photo-1616455579100-2ceaa4088152',// Acura luxury (unique)
+  'Infiniti':  'photo-1578662996442-48f60103fc96',// Infiniti luxury (unique)
+  'Lexus':     'photo-1549399909-c0b3c00c9b5f',   // Lexus luxury sedan (unique)
   // ── Korean ────────────────────────────────────────────────────────────────
-  'Hyundai': 'photo-1605816988069-b11383b50717',// Hyundai
-  'Kia':     'photo-1621007947382-bb4516d818d5',// Kia
-  'Genesis': 'photo-1580274455152-f90ac6b10d36',// Genesis luxury sedan
+  'Hyundai': 'photo-1605816988069-b11383b50717',// Hyundai (unique)
+  'Kia':     'photo-1621007947382-bb4516d818d5',// Kia (unique)
+  'Genesis': 'photo-1578662996442-48f60103fc96',// Genesis luxury sedan
   // ── Chinese EV ────────────────────────────────────────────────────────────
-  'BYD':    'photo-1560958089-b8a1929cea89',// EV
-  'NIO':    'photo-1601816461-bcd2f85f58bd',// EV sedan
-  'Xpeng':  'photo-1560958089-b8a1929cea89',// EV
-  'Li Auto':'photo-1609521263047-f8f205293f24',// SUV
+  'BYD':    'photo-1560958089-b8a1929cea89',// BYD EV
+  'NIO':    'photo-1601816461-bcd2f85f58bd',// NIO EV sedan
+  'Xpeng':  'photo-1560958089-b8a1929cea89',// Xpeng EV
+  'Li Auto':'photo-1519245659620-e859806a8d3b',// Li Auto SUV
   // ── Land Rover / Range Rover ───────────────────────────────────────────────
   'Land Rover': 'photo-1519245659620-e859806a8d3b',
   'Range Rover':'photo-1519245659620-e859806a8d3b',
@@ -82,7 +82,7 @@ const categoryImageMap = {
   'Sports':        'photo-1542362567-b07e54358753',
   'Coupe':         'photo-1503376780353-7e6692767b70',
   'Convertible':   'photo-1503376780353-7e6692767b70',
-  'Sedan':         'photo-1618843479313-40f8afb4b4d8',
+  'Sedan':         'photo-1547038577-da80abbc4f19',  // Generic sedan fallback
   'Luxury Sedan':  'photo-1580274455152-f90ac6b10d36',
   'SUV':           'photo-1519245659620-e859806a8d3b',
   'Luxury SUV':    'photo-1578662996442-48f60103fc96',
